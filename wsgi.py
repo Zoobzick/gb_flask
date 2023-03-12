@@ -1,7 +1,3 @@
-from blog.app import app
+from blog.app import create_app
 
-if __name__ == "__main__":
-    app.run(
-        host="192.168.0.20",
-        debug=True
-    )
+app = create_app()
