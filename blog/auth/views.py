@@ -23,7 +23,7 @@ def login():
         flash('Check your input details')
         return redirect(url_for('.login'))
     login_user(user)
-    return redirect(url_for('auth.profile', pk=user.id))
+    return redirect(url_for('user.profile', pk=user.id))
 
 
 @auth.route('/logout')
