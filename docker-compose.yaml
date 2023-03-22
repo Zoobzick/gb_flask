@@ -6,8 +6,9 @@ services:
       dockerfile: ./Dockerfile
       context: .
     environment:
-      DATABASE_URL: postgresql://user:password@localhost:5432/blog
+      DATABASE_URL: postgresql://trv:12345678@localhost:5432/blog
       CONFIG_NAME: DevConfig
+      ADMIN_PASSWORD: 12345678
     ports:
       - "8080:5000"
     depends_on:
@@ -16,10 +17,11 @@ services:
   database:
     image: postgres:12.7-alpine
     environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_DB: blog
-      POSTGRES_USER: roover
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: trv
+      POSTGRES_PASSWORD: 12345678
     volumes:
-      - ${HOME}/dbs/flask-lesson/pgdata_dev:/var/lib/postgresql/data/pgdata
+      - ${HOME}/dbs/flask-lesson/pgdata_dev:/var/lib/postgresql/12/main
     ports:
       - "5432:5432"
