@@ -5,6 +5,7 @@ from blog.auth.views import auth, login_manager
 from blog.models.models import db, Users
 from blog.users.views import user
 import os
+from blog.security.security import flask_bcrypt
 
 
 def create_app() -> Flask:
@@ -14,6 +15,8 @@ def create_app() -> Flask:
     app.config.from_object(f"blog.config.{cfg_name}")
     # app.config['SECRET_KEY'] = 'a%8g)$xp+&2tq15b#=#(-96a6b!4i$0$js_1*m#e7hrqq=ik9='
     # app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:vlad72kbhjqrjJ!@localhost:3306/blog"
+
+    flask_bcrypt.init_app(app)
 
     db.init_app(app)
 
