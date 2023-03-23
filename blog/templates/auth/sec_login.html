@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% from "macro/formhelpers.html" import render_field %}
+{% from "macro/formhelper.html" import render_field %}
 {% block title %}
 Register
 {% endblock %}
@@ -14,7 +14,7 @@ Register
 {# csrf protection #}
 {{ form.csrf_token() }}
 {# show inputs #}
-{% for field in ['username', 'password'] %}
+{% for field in ['email', 'password'] %}
 {{ render_field(form[field]) }}
 {% endfor %}
 {# submit #}

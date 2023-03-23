@@ -11,7 +11,7 @@ class UserBaseForm(FlaskForm):
                         filters=[lambda data: data and data.lower()])
 
 
-class RegistrationForm(FlaskForm):
+class RegistrationForm(UserBaseForm):
     password = PasswordField(
         "New Password", [validators.data_required(),
                          validators.EqualTo("confirm", message="Passwords must match")])

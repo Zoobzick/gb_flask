@@ -11,6 +11,7 @@ class BaseConfig(object):
 
 
 class DevConfig(BaseConfig):
+    SQLALCHEMY_DATABASE_URI = "mysql://root:vlad72kbhjqrjJ!@localhost:3306/blog"
     DEBUG = True
 
 

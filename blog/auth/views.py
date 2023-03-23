@@ -1,6 +1,6 @@
-from flask import Blueprint, current_app, render_template, request, flash, redirect, url_for
+from flask import Blueprint, current_app, render_template, request, redirect, url_for
 from flask_login import current_user, logout_user, LoginManager, login_user
-from werkzeug.security import check_password_hash
+from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import NotFound
 
 from blog.models.models import db
@@ -15,7 +15,7 @@ login_manager.login_view = 'auth.login'
 auth = Blueprint('auth', __name__, static_folder='../static')
 
 
-@auth.route('/login/', methods=['POST', 'GET'])
+@auth.route('/login', methods=['POST', 'GET'])
 def login():
     if current_user.is_authenticated:
         return redirect("articles.articles_list")
@@ -23,14 +23,14 @@ def login():
 
     if request.method == "POST" and form.validate_on_submit():
         user = Users.query.filter_by(
-            username=form.username.data).one_or_none()
+            email=form.email.data).one_or_none()
         if user is None:
-            return render_template("auth/login.html", form=form, error="username doesn't exist")
+            return render_template("auth/sec_login.html", form=form, error="username doesn't exist")
         if not user.validate_password(form.password.data):
-            return render_template("auth/login.html", form=form, error="invalid username or password")
+            return render_template("auth/sec_login.html", form=form, error="invalid username or password")
         login_user(user)
-        return redirect(url_for("index"))
-    return render_template("auth/login.html", form=form)
+        return redirect(url_for("articles.articles_list"))
+    return render_template("auth/sec_login.html", form=form)
 
     # if request.method == 'GET':
     #     return render_template('auth/login.html')
@@ -46,7 +46,7 @@ def login():
     # return redirect(url_for('user.profile', pk=user.id))
 
 
-@auth.route('/logout/')
+@auth.route('/logout')
 @login_manager.user_loader
 @login_required
 def logout():
@@ -54,13 +54,13 @@ def logout():
     return redirect(url_for('.login'))
 
 
-@auth.route("/secret/")
+@auth.route("/secret")
 @login_required
 def secret_view():
     return "Super secret data"
 
 
-@auth.route("/register/", methods=["GET", "POST"])
+@auth.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for("articles.articles_list"))
@@ -83,13 +83,13 @@ def register():
 
         try:
             db.session.commit()
-        except IntegirtyError:
+        except IntegrityError:
             current_app.logger.exception("Could not create user!")
             error = "Could not create user!"
         else:
             current_app.logger.info("Created user %s", user)
             login_user(user)
-            return redirect(url_for("index"))
+            return redirect(url_for("auth.login"))
 
     return render_template("auth/register.html", form=form, error=error)
 
