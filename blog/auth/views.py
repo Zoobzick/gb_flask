@@ -18,7 +18,7 @@ auth = Blueprint('auth', __name__, static_folder='../static')
 @auth.route('/login', methods=['POST', 'GET'])
 def login():
     if current_user.is_authenticated:
-        return redirect("articles.articles_list")
+        return redirect("articles.list")
     form = LoginForm(request.form)
 
     if request.method == "POST" and form.validate_on_submit():
@@ -29,7 +29,7 @@ def login():
         if not user.validate_password(form.password.data):
             return render_template("auth/sec_login.html", form=form, error="invalid username or password")
         login_user(user)
-        return redirect(url_for("articles.articles_list"))
+        return redirect(url_for("articles.list"))
     return render_template("auth/sec_login.html", form=form)
 
     # if request.method == 'GET':
@@ -63,7 +63,7 @@ def secret_view():
 @auth.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for("articles.articles_list"))
+        return redirect(url_for("articles.list"))
     error = None
     form = RegistrationForm(request.form)
     if request.method == "POST" and form.validate_on_submit():

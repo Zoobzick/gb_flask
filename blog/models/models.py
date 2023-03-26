@@ -1,5 +1,6 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey, func
 from sqlalchemy.orm import relationship
 from blog.security.security import flask_bcrypt
 
@@ -14,7 +15,7 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(255), unique=True, nullable=False)
     is_staff = db.Column(db.Boolean, nullable=False, default=False)
     _password = db.Column(db.LargeBinary, nullable=False)
-    article_id = db.relationship('Articles', backref='users')
+    author = relationship("Author", uselist=False, back_populates="user")
 
     @property
     def password(self):
@@ -33,4 +34,17 @@ class Articles(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     text = db.Column(db.Text, nullable=False)
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author_id = db.Column(db.Integer, ForeignKey("author.id"))
+    author = relationship("Author", back_populates="articles")
+
+    date_created = db.Column(db.DateTime, server_default=func.now())
+    date_updated = db.Column(db.DateTime, onupdate=func.now())
+
+
+class Author(db.Model):
+    __tablename__ = 'author'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user = relationship("Users", back_populates="author")
+    articles = relationship("Articles", back_populates="author")
+
