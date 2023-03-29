@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for
 from flask_migrate import Migrate
 from blog.articles.views import article
 from blog.auth.views import auth, login_manager
+from blog.authors.views import author
 from blog.models.models import db, Users
 from blog.users.views import user
 import os
@@ -37,6 +38,7 @@ def create_app() -> Flask:
 
 
 def register_blueprints(app: Flask):
+    app.register_blueprint(author)
     app.register_blueprint(auth)
     app.register_blueprint(user)
     app.register_blueprint(article)
