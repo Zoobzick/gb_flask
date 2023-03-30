@@ -6,6 +6,13 @@ from blog.security.security import flask_bcrypt
 
 db = SQLAlchemy()
 
+article_tag_association_table = db.Table(
+    "article_tag_association",
+    db.metadata,
+    db.Column("article_id", db.Integer, db.ForeignKey("articles.id"), nullable=False),
+    db.Column("tag_id", db.Integer, db.ForeignKey("tag.id"), nullable=False),
+)
+
 
 class Users(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -36,9 +43,13 @@ class Articles(db.Model):
     text = db.Column(db.Text, nullable=False)
     author_id = db.Column(db.Integer, ForeignKey("author.id"))
     author = relationship("Author", back_populates="articles")
-
     date_created = db.Column(db.DateTime, server_default=func.now())
     date_updated = db.Column(db.DateTime, onupdate=func.now())
+    tags = relationship(
+        "Tag",
+        secondary=article_tag_association_table,
+        back_populates="articles",
+    )
 
 
 class Author(db.Model):
@@ -47,4 +58,3 @@ class Author(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user = relationship("Users", back_populates="author")
     articles = relationship("Articles", back_populates="author")
-
