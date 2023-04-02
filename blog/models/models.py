@@ -51,6 +51,9 @@ class Articles(db.Model):
         back_populates="articles",
     )
 
+    def __str__(self):
+        return self.title
+
 
 class Author(db.Model):
     __tablename__ = 'author'
@@ -58,3 +61,6 @@ class Author(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user = relationship("Users", back_populates="author")
     articles = relationship("Articles", back_populates="author")
+
+    def __str__(self):
+        return self.user.username
