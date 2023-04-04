@@ -18,7 +18,7 @@ auth = Blueprint('auth', __name__, static_folder='../static')
 @auth.route('/login', methods=['POST', 'GET'])
 def login():
     if current_user.is_authenticated:
-        return redirect("articles.list")
+        return redirect("articles/")
     form = LoginForm(request.form)
 
     if request.method == "POST" and form.validate_on_submit():
@@ -29,7 +29,7 @@ def login():
         if not user.validate_password(form.password.data):
             return render_template("auth/sec_login.html", form=form, error="invalid username or password")
         login_user(user)
-        return redirect(url_for("articles.list"))
+        return redirect("articles/")
     return render_template("auth/sec_login.html", form=form)
 
     # if request.method == 'GET':

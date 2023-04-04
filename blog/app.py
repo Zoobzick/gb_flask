@@ -7,6 +7,7 @@ from blog.models.models import db, Users
 from blog.users.views import user
 import os
 from blog.security.security import flask_bcrypt
+from blog.admin import admin
 
 
 def create_app() -> Flask:
@@ -25,6 +26,8 @@ def create_app() -> Flask:
 
     login_manager.init_app(app)
 
+    admin.init_app(app)
+
     @login_manager.user_loader
     def load_user(user_id):
         return Users.query.get(int(user_id))
@@ -42,3 +45,5 @@ def register_blueprints(app: Flask):
     app.register_blueprint(auth)
     app.register_blueprint(user)
     app.register_blueprint(article)
+
+
