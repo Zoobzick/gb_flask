@@ -1,5 +1,6 @@
 from combojsonapi.utils import Relationship
-from marshmallow_jsonapi import Schema, fields
+from marshmallow_jsonapi import fields, Schema
+from marshmallow_jsonapi.flask import Schema
 
 
 class UserSchema(Schema):

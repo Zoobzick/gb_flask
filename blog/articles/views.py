@@ -8,12 +8,15 @@ from blog.forms.article import CreateArticleForm
 from blog.models import Tag
 from blog.models.models import Articles, db, Author
 
+import requests
+
 article = Blueprint('articles', __name__, url_prefix='/articles', static_folder='../static')
 
 
 @article.route("/", endpoint="list")
 def article_list():
     articles = Articles.query.all()
+    print(articles)
     return render_template("articles/list.html", articles=articles)
 
 
@@ -30,10 +33,10 @@ def article_details(article_id):
 def create_article():
     error = None
     form = CreateArticleForm(request.form)
-    form.tags.choices = [(tag.id, tag.name ) for tag in Tag.query.order_by("name")]
+    form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.order_by("name")]
     if request.method == "POST" and form.validate_on_submit():
         article = Articles(title=form.title.data.strip(), text=form.text.data)
-        if form.tags.data :
+        if form.tags.data:
             selected_tags = Tag.query.filter(Tag.id.in_(form.tags.data))
             for tag in selected_tags:
                 article.tags.append(tag)
@@ -56,3 +59,10 @@ def create_article():
             return redirect(url_for("articles.details", article_id=article.id))
 
     return render_template("articles/create.html", form=form, error=error)
+
+
+@article.route("/api_data/", endpoint="api_data")
+def article_api_data_list():
+    response = requests.get("http://127.0.0.1:5000/api/articles/?include=author&fields%5Bauthor%5D=user").json()['data']
+    print(response)
+    return render_template("articles/api_data.html", articles=response)

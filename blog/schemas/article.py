@@ -1,5 +1,5 @@
 from combojsonapi.utils import Relationship
-from marshmallow_jsonapi import Schema, fields
+from marshmallow_jsonapi import fields, Schema
 
 
 class ArticleSchema(Schema):
@@ -11,15 +11,15 @@ class ArticleSchema(Schema):
 
     id = fields.Integer(as_string=True)
     title = fields.String(allow_none=False)
-    body = fields.String(allow_none=False)
-    dt_created = fields.DateTime(allow_none=False)
-    dt_updated = fields.DateTime(allow_none=False)
+    text = fields.String(allow_none=False)
+    date_created = fields.DateTime(allow_none=False)
+    date_updated = fields.DateTime(allow_none=False)
 
     author = Relationship(
         nested="AuthorSchema",
         attribute="author",
-        related_view="author_detail",
-        related_view_kwargs={"id": "<id>"},
+        related_url="author_detail",
+        related_url_kwargs={"id": "<id>"},
         schema="AuthorSchema",
         type_="author",
         many=False,
@@ -33,4 +33,3 @@ class ArticleSchema(Schema):
         type_="tag",
         many=True,
     )
-

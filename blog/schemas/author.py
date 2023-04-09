@@ -1,5 +1,6 @@
 from combojsonapi.utils import Relationship
-from marshmallow_jsonapi import Schema, fields
+from marshmallow_jsonapi import fields, Schema
+
 
 
 class AuthorSchema(Schema):
@@ -14,8 +15,8 @@ class AuthorSchema(Schema):
     user = Relationship(
             nested="UserSchema",
             attribute="user",
-            related_view="user_detail",
-            related_view_kwargs={"id": "<id>"},
+            related_url="user_detail",
+            related_url_kwargs={"id": "<id>"},
             schema="UserSchema",
             type_="user",
             many=False,
