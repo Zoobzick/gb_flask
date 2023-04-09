@@ -8,10 +8,13 @@ from blog.users.views import user
 import os
 from blog.security.security import flask_bcrypt
 from blog.admin import admin
+from blog.api import init_api
 
 
 def create_app() -> Flask:
     app = Flask(__name__)
+
+    api = init_api(app)
 
     cfg_name = os.environ.get("CONFIG_NAME") or "DevConfig"
     app.config.from_object(f"blog.config.{cfg_name}")
