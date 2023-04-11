@@ -11,13 +11,6 @@ app.run(
 )
 
 
-# @app.cli.command('init-db')
-# def init_db():
-#     with app.app_context():
-#         db.create_all()
-#         print('DB created')
-
-
 @app.cli.command('create-admin')
 def create_admin():
     with app.app_context():
