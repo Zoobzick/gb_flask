@@ -3,7 +3,10 @@
 class BaseConfig(object):
     DEBUG = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = "mysql://root@https://gb-flask-ycuz.onrender.com:3306/blog"
+    DB_USER = "root"
+    DB_PASSWD = ""
+    SITE_URL = "https://gb-flask-ycuz.onrender.com"
+    SQLALCHEMY_DATABASE_URI = f"mysql://{DB_USER}:{DB_PASSWD}@{SITE_URL}:3306/blog"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = 'a%8g)$xp+&2tq15b#=#(-96a6b!4i$0$js_1*m#e7hrqq=ik9='
     WTF_CSRF_ENABLED = True
